@@ -1,0 +1,700 @@
+# module.igw.aws_internet_gateway.main:
+resource "aws_internet_gateway" "main" {
+    arn      = "arn:aws:ec2:us-east-2:979559056307:internet-gateway/igw-06a3b16388867a01a"
+    id       = "igw-06a3b16388867a01a"
+    owner_id = "979559056307"
+    tags     = {
+        "Component" = "igw"
+        "Name"      = "partner-2025-10-30-igw"
+    }
+    tags_all = {
+        "Component" = "igw"
+        "Name"      = "partner-2025-10-30-igw"
+        "expire-on" = "2025-10-30"
+        "owner"     = "anuj.panchal"
+        "purpose"   = "partner"
+    }
+    vpc_id   = "vpc-04985860b0b0d4c16"
+}
+# module.mongodb_atlas.aws_security_group.my_security_group:
+resource "aws_security_group" "my_security_group" {
+    arn                    = "arn:aws:ec2:us-east-2:979559056307:security-group/sg-0490bdd5c387d448f"
+    description            = "Allow SSH access to EC2 instances"
+    egress                 = [
+        {
+            cidr_blocks      = [
+                "0.0.0.0/0",
+            ]
+            description      = ""
+            from_port        = 0
+            ipv6_cidr_blocks = []
+            prefix_list_ids  = []
+            protocol         = "-1"
+            security_groups  = []
+            self             = false
+            to_port          = 0
+        },
+    ]
+    id                     = "sg-0490bdd5c387d448f"
+    ingress                = [
+        {
+            cidr_blocks      = [
+                "0.0.0.0/0",
+            ]
+            description      = ""
+            from_port        = 22
+            ipv6_cidr_blocks = []
+            prefix_list_ids  = []
+            protocol         = "tcp"
+            security_groups  = []
+            self             = false
+            to_port          = 22
+        },
+    ]
+    name                   = "MySecurityGroup"
+    owner_id               = "979559056307"
+    revoke_rules_on_delete = false
+    tags_all               = {
+        "expire-on" = "2025-10-30"
+        "owner"     = "anuj.panchal"
+        "purpose"   = "partner"
+    }
+    vpc_id                 = "vpc-04985860b0b0d4c16"
+}
+
+# module.mongodb_atlas.aws_vpc_endpoint.vpce_east:
+resource "aws_vpc_endpoint" "vpce_east" {
+    arn                   = "arn:aws:ec2:us-east-2:979559056307:vpc-endpoint/vpce-0c413fa262be6e4c6"
+    cidr_blocks           = []
+    dns_entry             = [
+        {
+            dns_name       = "vpce-0c413fa262be6e4c6-xm3ao0se.vpce-svc-0afe311b02b7026c4.us-east-2.vpce.amazonaws.com"
+            hosted_zone_id = "ZC8PG0KIFKBRI"
+        },
+        {
+            dns_name       = "vpce-0c413fa262be6e4c6-xm3ao0se-us-east-2a.vpce-svc-0afe311b02b7026c4.us-east-2.vpce.amazonaws.com"
+            hosted_zone_id = "ZC8PG0KIFKBRI"
+        },
+    ]
+    id                    = "vpce-0c413fa262be6e4c6"
+    network_interface_ids = [
+        "eni-06209a80491bda4d3",
+    ]
+    owner_id              = "979559056307"
+    policy                = jsonencode(
+        {
+            Statement = [
+                {
+                    Action    = "*"
+                    Effect    = "Allow"
+                    Principal = "*"
+                    Resource  = "*"
+                },
+            ]
+        }
+    )
+    private_dns_enabled   = false
+    requester_managed     = false
+    route_table_ids       = []
+    security_group_ids    = [
+        "sg-0490bdd5c387d448f",
+    ]
+    service_name          = "com.amazonaws.vpce.us-east-2.vpce-svc-0afe311b02b7026c4"
+    state                 = "pendingAcceptance"
+    subnet_ids            = [
+        "subnet-085c6124712a2ad4d",
+    ]
+    tags_all              = {
+        "expire-on" = "2025-10-30"
+        "owner"     = "anuj.panchal"
+        "purpose"   = "partner"
+    }
+    vpc_endpoint_type     = "Interface"
+    vpc_id                = "vpc-04985860b0b0d4c16"
+}
+
+# module.mongodb_atlas.mongodbatlas_cluster.cluster:
+resource "mongodbatlas_cluster" "cluster" {
+    auto_scaling_compute_enabled            = false
+    auto_scaling_compute_scale_down_enabled = false
+    auto_scaling_disk_gb_enabled            = false
+    backup_enabled                          = false
+    cluster_id                              = "67920c382a9a101a1ff0597f"
+    cluster_type                            = "REPLICASET"
+    connection_strings                      = [
+        {
+            private          = ""
+            private_endpoint = [
+                {
+                    connection_string                     = "mongodb://pl-0-us-east-2.9bmph.mongodb.net:1024,pl-0-us-east-2.9bmph.mongodb.net:1025,pl-0-us-east-2.9bmph.mongodb.net:1026/?ssl=true&authSource=admin&replicaSet=atlas-ho6s3d-shard-0"
+                    endpoints                             = [
+                        {
+                            endpoint_id   = "vpce-0c413fa262be6e4c6"
+                            provider_name = "AWS"
+                            region        = "US_EAST_2"
+                        },
+                    ]
+                    srv_connection_string                 = "mongodb+srv://appdb-pl-0.9bmph.mongodb.net"
+                    srv_shard_optimized_connection_string = ""
+                    type                                  = "MONGOD"
+                },
+            ]
+            private_srv      = ""
+            standard         = "mongodb://appdb-shard-00-00.9bmph.mongodb.net:27017,appdb-shard-00-01.9bmph.mongodb.net:27017,appdb-shard-00-02.9bmph.mongodb.net:27017/?ssl=true&authSource=admin&replicaSet=atlas-ho6s3d-shard-0"
+            standard_srv     = "mongodb+srv://appdb.9bmph.mongodb.net"
+        },
+    ]
+    container_id                            = "67920c38e12e071f1f00b744"
+    disk_size_gb                            = 10
+    encryption_at_rest_provider             = "NONE"
+    id                                      = "Y2x1c3Rlcl9pZA==:Njc5MjBjMzgyYTlhMTAxYTFmZjA1OTdm-Y2x1c3Rlcl9uYW1l:YXBwZGI=-cHJvamVjdF9pZA==:Njc5MjBjMmQxMTAyYWIwNDZkYmJhMTRh-cHJvdmlkZXJfbmFtZQ==:QVdT"
+    mongo_db_major_version                  = "7.0"
+    mongo_db_version                        = "7.0.16"
+    mongo_uri                               = "mongodb://appdb-shard-00-00.9bmph.mongodb.net:27017,appdb-shard-00-01.9bmph.mongodb.net:27017,appdb-shard-00-02.9bmph.mongodb.net:27017"
+    mongo_uri_updated                       = "2025-01-23T09:40:20Z"
+    mongo_uri_with_options                  = "mongodb://appdb-shard-00-00.9bmph.mongodb.net:27017,appdb-shard-00-01.9bmph.mongodb.net:27017,appdb-shard-00-02.9bmph.mongodb.net:27017/?ssl=true&authSource=admin&replicaSet=atlas-ho6s3d-shard-0"
+    name                                    = "appdb"
+    num_shards                              = 1
+    paused                                  = false
+    pit_enabled                             = false
+    project_id                              = "67920c2d1102ab046dbba14a"
+    provider_disk_iops                      = 3000
+    provider_encrypt_ebs_volume_flag        = true
+    provider_instance_size_name             = "M10"
+    provider_name                           = "AWS"
+    provider_region_name                    = "US_EAST_2"
+    provider_volume_type                    = "STANDARD"
+    redact_client_log_data                  = false
+    replication_factor                      = 3
+    snapshot_backup_policy                  = []
+    srv_address                             = "mongodb+srv://appdb.9bmph.mongodb.net"
+    state_name                              = "IDLE"
+    termination_protection_enabled          = false
+    version_release_system                  = "LTS"
+
+    advanced_configuration {
+        change_stream_options_pre_and_post_images_expire_after_seconds = -1
+        custom_openssl_cipher_config_tls12                             = []
+        default_max_time_ms                                            = 0
+        fail_index_key_too_long                                        = false
+        javascript_enabled                                             = true
+        minimum_enabled_tls_protocol                                   = "TLS1_2"
+        no_table_scan                                                  = false
+        oplog_min_retention_hours                                      = 0
+        oplog_size_mb                                                  = 0
+        sample_refresh_interval_bi_connector                           = 0
+        sample_size_bi_connector                                       = 0
+        tls_cipher_config_mode                                         = "DEFAULT"
+        transaction_lifetime_limit_seconds                             = 0
+    }
+
+    bi_connector_config {
+        enabled         = false
+        read_preference = "secondary"
+    }
+
+    replication_specs {
+        id         = "67920c382a9a101a1ff05966"
+        num_shards = 1
+        zone_name  = "Zone 1"
+
+        regions_config {
+            analytics_nodes = 0
+            electable_nodes = 3
+            priority        = 7
+            read_only_nodes = 0
+            region_name     = "US_EAST_2"
+        }
+    }
+}
+
+# module.mongodb_atlas.mongodbatlas_privatelink_endpoint.pe_east:
+resource "mongodbatlas_privatelink_endpoint" "pe_east" {
+    endpoint_group_names     = []
+    endpoint_service_name    = "com.amazonaws.vpce.us-east-2.vpce-svc-0afe311b02b7026c4"
+    id                       = "cHJpdmF0ZV9saW5rX2lk:Njc5MjBjMzhlMTJlMDcxZjFmMDBiNzQw-cHJvamVjdF9pZA==:Njc5MjBjMmQxMTAyYWIwNDZkYmJhMTRh-cHJvdmlkZXJfbmFtZQ==:QVdT-cmVnaW9u:dXMtZWFzdC0y"
+    interface_endpoints      = []
+    private_endpoints        = []
+    private_link_id          = "67920c38e12e071f1f00b740"
+    project_id               = "67920c2d1102ab046dbba14a"
+    provider_name            = "AWS"
+    region                   = "us-east-2"
+    region_name              = "US_EAST_2"
+    service_attachment_names = []
+    status                   = "AVAILABLE"
+
+    timeouts {
+        create = "20m"
+        delete = "20m"
+    }
+}
+
+# module.mongodb_atlas.mongodbatlas_privatelink_endpoint_service.pe_east_service:
+resource "mongodbatlas_privatelink_endpoint_service" "pe_east_service" {
+    aws_connection_status = "AVAILABLE"
+    delete_requested      = false
+    endpoint_service_id   = "vpce-0c413fa262be6e4c6"
+    id                    = "ZW5kcG9pbnRfc2VydmljZV9pZA==:dnBjZS0wYzQxM2ZhMjYyYmU2ZTRjNg==-cHJpdmF0ZV9saW5rX2lk:Njc5MjBjMzhlMTJlMDcxZjFmMDBiNzQw-cHJvamVjdF9pZA==:Njc5MjBjMmQxMTAyYWIwNDZkYmJhMTRh-cHJvdmlkZXJfbmFtZQ==:QVdT"
+    interface_endpoint_id = "vpce-0c413fa262be6e4c6"
+    private_link_id       = "cHJpdmF0ZV9saW5rX2lk:Njc5MjBjMzhlMTJlMDcxZjFmMDBiNzQw-cHJvamVjdF9pZA==:Njc5MjBjMmQxMTAyYWIwNDZkYmJhMTRh-cHJvdmlkZXJfbmFtZQ==:QVdT-cmVnaW9u:dXMtZWFzdC0y"
+    project_id            = "67920c2d1102ab046dbba14a"
+    provider_name         = "AWS"
+}
+
+# module.mongodb_atlas.mongodbatlas_project.project:
+resource "mongodbatlas_project" "project" {
+    cluster_count                                    = 0
+    created                                          = "2025-01-23T09:30:23Z"
+    id                                               = "67920c2d1102ab046dbba14a"
+    ip_addresses                                     = {
+        services = {
+            clusters = []
+        }
+    }
+    is_collect_database_specifics_statistics_enabled = true
+    is_data_explorer_enabled                         = true
+    is_extended_storage_sizes_enabled                = false
+    is_performance_advisor_enabled                   = true
+    is_realtime_performance_panel_enabled            = true
+    is_schema_advisor_enabled                        = true
+    is_slow_operation_thresholding_enabled           = true
+    name                                             = "anuj-lz-terraform"
+    org_id                                           = "599f016c9f78f769464f5f94"
+    with_default_alerts_settings                     = true
+}
+# module.nat_gateway["us-east-2a"].aws_nat_gateway.main:
+resource "aws_nat_gateway" "main" {
+    allocation_id        = "eipalloc-08cce7b74514d0ef4"
+    connectivity_type    = "public"
+    id                   = "nat-0865bca2f809617d5"
+    network_interface_id = "eni-0eeec2aa8965a9ab0"
+    private_ip           = "10.0.0.115"
+    public_ip            = "18.216.162.127"
+    subnet_id            = "subnet-05c4ccb2344d8540e"
+    tags                 = {
+        "Component" = "nat"
+        "Name"      = "partner-2025-10-30-nat-2a"
+    }
+    tags_all             = {
+        "Component" = "nat"
+        "Name"      = "partner-2025-10-30-nat-2a"
+        "expire-on" = "2025-10-30"
+        "owner"     = "anuj.panchal"
+        "purpose"   = "partner"
+    }
+}
+# module.nat_gateway["us-east-2b"].aws_nat_gateway.main:
+resource "aws_nat_gateway" "main" {
+    allocation_id        = "eipalloc-06df1cca0a018f2ea"
+    connectivity_type    = "public"
+    id                   = "nat-074b6e32b4e16c4a1"
+    network_interface_id = "eni-051b7b8b0b2edfa53"
+    private_ip           = "10.0.1.187"
+    public_ip            = "18.216.237.218"
+    subnet_id            = "subnet-01268c619bf9564f3"
+    tags                 = {
+        "Component" = "nat"
+        "Name"      = "partner-2025-10-30-nat-2b"
+    }
+    tags_all             = {
+        "Component" = "nat"
+        "Name"      = "partner-2025-10-30-nat-2b"
+        "expire-on" = "2025-10-30"
+        "owner"     = "anuj.panchal"
+        "purpose"   = "partner"
+    }
+}
+# module.private_subnet["us-east-2a"].aws_route_table.main:
+resource "aws_route_table" "main" {
+    arn              = "arn:aws:ec2:us-east-2:979559056307:route-table/rtb-0c4fd7c36b4f25570"
+    id               = "rtb-0c4fd7c36b4f25570"
+    owner_id         = "979559056307"
+    propagating_vgws = []
+    route            = [
+        {
+            carrier_gateway_id         = ""
+            cidr_block                 = "0.0.0.0/0"
+            destination_prefix_list_id = ""
+            egress_only_gateway_id     = ""
+            gateway_id                 = ""
+            instance_id                = ""
+            ipv6_cidr_block            = ""
+            local_gateway_id           = ""
+            nat_gateway_id             = "nat-0865bca2f809617d5"
+            network_interface_id       = ""
+            transit_gateway_id         = ""
+            vpc_endpoint_id            = ""
+            vpc_peering_connection_id  = ""
+        },
+    ]
+    tags             = {
+        "Component" = "pri-sn"
+        "Name"      = "partner-2025-10-30-pri-rt-2a"
+    }
+    tags_all         = {
+        "Component" = "pri-sn"
+        "Name"      = "partner-2025-10-30-pri-rt-2a"
+        "expire-on" = "2025-10-30"
+        "owner"     = "anuj.panchal"
+        "purpose"   = "partner"
+    }
+    vpc_id           = "vpc-04985860b0b0d4c16"
+}
+
+# module.private_subnet["us-east-2a"].aws_route_table_association.main:
+resource "aws_route_table_association" "main" {
+    id             = "rtbassoc-091d91857b3471791"
+    route_table_id = "rtb-0c4fd7c36b4f25570"
+    subnet_id      = "subnet-085c6124712a2ad4d"
+}
+
+# module.private_subnet["us-east-2a"].aws_subnet.main:
+resource "aws_subnet" "main" {
+    arn                                            = "arn:aws:ec2:us-east-2:979559056307:subnet/subnet-085c6124712a2ad4d"
+    assign_ipv6_address_on_creation                = false
+    availability_zone                              = "us-east-2a"
+    availability_zone_id                           = "use2-az1"
+    cidr_block                                     = "10.0.32.0/19"
+    enable_dns64                                   = false
+    enable_resource_name_dns_a_record_on_launch    = false
+    enable_resource_name_dns_aaaa_record_on_launch = false
+    id                                             = "subnet-085c6124712a2ad4d"
+    ipv6_native                                    = false
+    map_customer_owned_ip_on_launch                = false
+    map_public_ip_on_launch                        = false
+    owner_id                                       = "979559056307"
+    private_dns_hostname_type_on_launch            = "ip-name"
+    tags                                           = {
+        "Component" = "pri-sn"
+        "Name"      = "partner-2025-10-30-pri-sn-2a"
+    }
+    tags_all                                       = {
+        "Component" = "pri-sn"
+        "Name"      = "partner-2025-10-30-pri-sn-2a"
+        "expire-on" = "2025-10-30"
+        "owner"     = "anuj.panchal"
+        "purpose"   = "partner"
+    }
+    vpc_id                                         = "vpc-04985860b0b0d4c16"
+}
+# module.private_subnet["us-east-2b"].aws_route_table.main:
+resource "aws_route_table" "main" {
+    arn              = "arn:aws:ec2:us-east-2:979559056307:route-table/rtb-0bad53eb10b8328aa"
+    id               = "rtb-0bad53eb10b8328aa"
+    owner_id         = "979559056307"
+    propagating_vgws = []
+    route            = [
+        {
+            carrier_gateway_id         = ""
+            cidr_block                 = "0.0.0.0/0"
+            destination_prefix_list_id = ""
+            egress_only_gateway_id     = ""
+            gateway_id                 = ""
+            instance_id                = ""
+            ipv6_cidr_block            = ""
+            local_gateway_id           = ""
+            nat_gateway_id             = "nat-074b6e32b4e16c4a1"
+            network_interface_id       = ""
+            transit_gateway_id         = ""
+            vpc_endpoint_id            = ""
+            vpc_peering_connection_id  = ""
+        },
+    ]
+    tags             = {
+        "Component" = "pri-sn"
+        "Name"      = "partner-2025-10-30-pri-rt-2b"
+    }
+    tags_all         = {
+        "Component" = "pri-sn"
+        "Name"      = "partner-2025-10-30-pri-rt-2b"
+        "expire-on" = "2025-10-30"
+        "owner"     = "anuj.panchal"
+        "purpose"   = "partner"
+    }
+    vpc_id           = "vpc-04985860b0b0d4c16"
+}
+
+# module.private_subnet["us-east-2b"].aws_route_table_association.main:
+resource "aws_route_table_association" "main" {
+    id             = "rtbassoc-0d6f6a7847688e760"
+    route_table_id = "rtb-0bad53eb10b8328aa"
+    subnet_id      = "subnet-07fed81f3afa1e39c"
+}
+
+# module.private_subnet["us-east-2b"].aws_subnet.main:
+resource "aws_subnet" "main" {
+    arn                                            = "arn:aws:ec2:us-east-2:979559056307:subnet/subnet-07fed81f3afa1e39c"
+    assign_ipv6_address_on_creation                = false
+    availability_zone                              = "us-east-2b"
+    availability_zone_id                           = "use2-az2"
+    cidr_block                                     = "10.0.64.0/19"
+    enable_dns64                                   = false
+    enable_resource_name_dns_a_record_on_launch    = false
+    enable_resource_name_dns_aaaa_record_on_launch = false
+    id                                             = "subnet-07fed81f3afa1e39c"
+    ipv6_native                                    = false
+    map_customer_owned_ip_on_launch                = false
+    map_public_ip_on_launch                        = false
+    owner_id                                       = "979559056307"
+    private_dns_hostname_type_on_launch            = "ip-name"
+    tags                                           = {
+        "Component" = "pri-sn"
+        "Name"      = "partner-2025-10-30-pri-sn-2b"
+    }
+    tags_all                                       = {
+        "Component" = "pri-sn"
+        "Name"      = "partner-2025-10-30-pri-sn-2b"
+        "expire-on" = "2025-10-30"
+        "owner"     = "anuj.panchal"
+        "purpose"   = "partner"
+    }
+    vpc_id                                         = "vpc-04985860b0b0d4c16"
+}
+# module.public_subnet["us-east-2a"].aws_route_table.main:
+resource "aws_route_table" "main" {
+    arn              = "arn:aws:ec2:us-east-2:979559056307:route-table/rtb-00f96f9409627b2a4"
+    id               = "rtb-00f96f9409627b2a4"
+    owner_id         = "979559056307"
+    propagating_vgws = []
+    route            = [
+        {
+            carrier_gateway_id         = ""
+            cidr_block                 = "0.0.0.0/0"
+            destination_prefix_list_id = ""
+            egress_only_gateway_id     = ""
+            gateway_id                 = "igw-06a3b16388867a01a"
+            instance_id                = ""
+            ipv6_cidr_block            = ""
+            local_gateway_id           = ""
+            nat_gateway_id             = ""
+            network_interface_id       = ""
+            transit_gateway_id         = ""
+            vpc_endpoint_id            = ""
+            vpc_peering_connection_id  = ""
+        },
+    ]
+    tags             = {
+        "Component" = "pub-rt"
+        "Name"      = "partner-2025-10-30-pub-rt-2a"
+    }
+    tags_all         = {
+        "Component" = "pub-rt"
+        "Name"      = "partner-2025-10-30-pub-rt-2a"
+        "expire-on" = "2025-10-30"
+        "owner"     = "anuj.panchal"
+        "purpose"   = "partner"
+    }
+    vpc_id           = "vpc-04985860b0b0d4c16"
+}
+
+# module.public_subnet["us-east-2a"].aws_route_table_association.main:
+resource "aws_route_table_association" "main" {
+    id             = "rtbassoc-00a046780752617cf"
+    route_table_id = "rtb-00f96f9409627b2a4"
+    subnet_id      = "subnet-05c4ccb2344d8540e"
+}
+
+# module.public_subnet["us-east-2a"].aws_subnet.main:
+resource "aws_subnet" "main" {
+    arn                                            = "arn:aws:ec2:us-east-2:979559056307:subnet/subnet-05c4ccb2344d8540e"
+    assign_ipv6_address_on_creation                = false
+    availability_zone                              = "us-east-2a"
+    availability_zone_id                           = "use2-az1"
+    cidr_block                                     = "10.0.0.0/24"
+    enable_dns64                                   = false
+    enable_resource_name_dns_a_record_on_launch    = false
+    enable_resource_name_dns_aaaa_record_on_launch = false
+    id                                             = "subnet-05c4ccb2344d8540e"
+    ipv6_native                                    = false
+    map_customer_owned_ip_on_launch                = false
+    map_public_ip_on_launch                        = false
+    owner_id                                       = "979559056307"
+    private_dns_hostname_type_on_launch            = "ip-name"
+    tags                                           = {
+        "Component" = "pub-sn"
+        "Name"      = "partner-2025-10-30-pub-sn-2a"
+    }
+    tags_all                                       = {
+        "Component" = "pub-sn"
+        "Name"      = "partner-2025-10-30-pub-sn-2a"
+        "expire-on" = "2025-10-30"
+        "owner"     = "anuj.panchal"
+        "purpose"   = "partner"
+    }
+    vpc_id                                         = "vpc-04985860b0b0d4c16"
+}
+# module.public_subnet["us-east-2b"].aws_route_table.main:
+resource "aws_route_table" "main" {
+    arn              = "arn:aws:ec2:us-east-2:979559056307:route-table/rtb-0398ac0f0fcc50031"
+    id               = "rtb-0398ac0f0fcc50031"
+    owner_id         = "979559056307"
+    propagating_vgws = []
+    route            = [
+        {
+            carrier_gateway_id         = ""
+            cidr_block                 = "0.0.0.0/0"
+            destination_prefix_list_id = ""
+            egress_only_gateway_id     = ""
+            gateway_id                 = "igw-06a3b16388867a01a"
+            instance_id                = ""
+            ipv6_cidr_block            = ""
+            local_gateway_id           = ""
+            nat_gateway_id             = ""
+            network_interface_id       = ""
+            transit_gateway_id         = ""
+            vpc_endpoint_id            = ""
+            vpc_peering_connection_id  = ""
+        },
+    ]
+    tags             = {
+        "Component" = "pub-rt"
+        "Name"      = "partner-2025-10-30-pub-rt-2b"
+    }
+    tags_all         = {
+        "Component" = "pub-rt"
+        "Name"      = "partner-2025-10-30-pub-rt-2b"
+        "expire-on" = "2025-10-30"
+        "owner"     = "anuj.panchal"
+        "purpose"   = "partner"
+    }
+    vpc_id           = "vpc-04985860b0b0d4c16"
+}
+
+# module.public_subnet["us-east-2b"].aws_route_table_association.main:
+resource "aws_route_table_association" "main" {
+    id             = "rtbassoc-0ae19b34c63461d01"
+    route_table_id = "rtb-0398ac0f0fcc50031"
+    subnet_id      = "subnet-01268c619bf9564f3"
+}
+
+# module.public_subnet["us-east-2b"].aws_subnet.main:
+resource "aws_subnet" "main" {
+    arn                                            = "arn:aws:ec2:us-east-2:979559056307:subnet/subnet-01268c619bf9564f3"
+    assign_ipv6_address_on_creation                = false
+    availability_zone                              = "us-east-2b"
+    availability_zone_id                           = "use2-az2"
+    cidr_block                                     = "10.0.1.0/24"
+    enable_dns64                                   = false
+    enable_resource_name_dns_a_record_on_launch    = false
+    enable_resource_name_dns_aaaa_record_on_launch = false
+    id                                             = "subnet-01268c619bf9564f3"
+    ipv6_native                                    = false
+    map_customer_owned_ip_on_launch                = false
+    map_public_ip_on_launch                        = false
+    owner_id                                       = "979559056307"
+    private_dns_hostname_type_on_launch            = "ip-name"
+    tags                                           = {
+        "Component" = "pub-sn"
+        "Name"      = "partner-2025-10-30-pub-sn-2b"
+    }
+    tags_all                                       = {
+        "Component" = "pub-sn"
+        "Name"      = "partner-2025-10-30-pub-sn-2b"
+        "expire-on" = "2025-10-30"
+        "owner"     = "anuj.panchal"
+        "purpose"   = "partner"
+    }
+    vpc_id                                         = "vpc-04985860b0b0d4c16"
+}
+# module.vpc.aws_flow_log.main[0]:
+resource "aws_flow_log" "main" {
+    arn                      = "arn:aws:ec2:us-east-2:979559056307:vpc-flow-log/fl-0c3633d5181afb3e8"
+    id                       = "fl-0c3633d5181afb3e8"
+    log_destination          = "arn:aws:s3:::vpc-flow-logs-vpc-04985860b0b0d4c16"
+    log_destination_type     = "s3"
+    log_format               = "${version} ${account-id} ${interface-id} ${srcaddr} ${dstaddr} ${srcport} ${dstport} ${protocol} ${packets} ${bytes} ${start} ${end} ${action} ${log-status}"
+    max_aggregation_interval = 600
+    tags                     = {
+        "Component" = "vpc-flow-logs"
+        "Name"      = "partner-2025-10-30-vpc-flow-logs"
+    }
+    tags_all                 = {
+        "Component" = "vpc-flow-logs"
+        "Name"      = "partner-2025-10-30-vpc-flow-logs"
+        "expire-on" = "2025-10-30"
+        "owner"     = "anuj.panchal"
+        "purpose"   = "partner"
+    }
+    traffic_type             = "ALL"
+    vpc_id                   = "vpc-04985860b0b0d4c16"
+
+    destination_options {
+        file_format                = "plain-text"
+        hive_compatible_partitions = false
+        per_hour_partition         = false
+    }
+}
+
+# module.vpc.aws_s3_bucket.vpc_flow_logs[0]:
+resource "aws_s3_bucket" "vpc_flow_logs" {
+    acl                         = "private"
+    arn                         = "arn:aws:s3:::vpc-flow-logs-vpc-04985860b0b0d4c16"
+    bucket                      = "vpc-flow-logs-vpc-04985860b0b0d4c16"
+    bucket_domain_name          = "vpc-flow-logs-vpc-04985860b0b0d4c16.s3.amazonaws.com"
+    bucket_regional_domain_name = "vpc-flow-logs-vpc-04985860b0b0d4c16.s3.us-east-2.amazonaws.com"
+    force_destroy               = true
+    hosted_zone_id              = "Z2O1EMRO9K5GLX"
+    id                          = "vpc-flow-logs-vpc-04985860b0b0d4c16"
+    object_lock_enabled         = false
+    region                      = "us-east-2"
+    request_payer               = "BucketOwner"
+    tags                        = {
+        "Component"    = "s3"
+        "Name"         = "partner-2025-10-30-s3"
+        "OwnerContact" = "anuj.panchal@mongodb.com"
+    }
+    tags_all                    = {
+        "Component"    = "s3"
+        "Name"         = "partner-2025-10-30-s3"
+        "OwnerContact" = "anuj.panchal@mongodb.com"
+        "expire-on"    = "2025-10-30"
+        "owner"        = "anuj.panchal"
+        "purpose"      = "partner"
+    }
+
+    server_side_encryption_configuration {
+        rule {
+            bucket_key_enabled = false
+
+            apply_server_side_encryption_by_default {
+                sse_algorithm = "AES256"
+            }
+        }
+    }
+
+    versioning {
+        enabled    = false
+        mfa_delete = false
+    }
+}
+
+# module.vpc.aws_vpc.main:
+resource "aws_vpc" "main" {
+    arn                              = "arn:aws:ec2:us-east-2:979559056307:vpc/vpc-04985860b0b0d4c16"
+    assign_generated_ipv6_cidr_block = false
+    cidr_block                       = "10.0.0.0/16"
+    default_network_acl_id           = "acl-0b0916a16ae765f3c"
+    default_route_table_id           = "rtb-0ec6c16de2579fd83"
+    default_security_group_id        = "sg-07d1b31f31edfb1f2"
+    dhcp_options_id                  = "dopt-811cf2e8"
+    enable_classiclink               = false
+    enable_classiclink_dns_support   = false
+    enable_dns_hostnames             = true
+    enable_dns_support               = true
+    id                               = "vpc-04985860b0b0d4c16"
+    instance_tenancy                 = "default"
+    ipv6_netmask_length              = 0
+    main_route_table_id              = "rtb-0ec6c16de2579fd83"
+    owner_id                         = "979559056307"
+    tags                             = {
+        "Component" = "vpc"
+        "Name"      = "partner-2025-10-30-vpc"
+    }
+    tags_all                         = {
+        "Component" = "vpc"
+        "Name"      = "partner-2025-10-30-vpc"
+        "expire-on" = "2025-10-30"
+        "owner"     = "anuj.panchal"
+        "purpose"   = "partner"
+    }
+}
