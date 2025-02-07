@@ -65,13 +65,13 @@ variable "vpc_cidr" {
 variable "atlas_public_key" {
   description = "MongoDB Atlas Public API Key"
   type        = string
-  default     = "wzvstqfl"
+  default     = "YOUR PUBLIC KEY"
 }
 
 variable "atlas_private_key" {
   description = "MongoDB Atlas Private API Key"
   type        = string
-  default     = "96cf9aa9-96b9-441a-b38d-bc5245263d52"
+  default     = "YOUR PRIVATE KEY"
 }
 
 variable "atlas_org_id" {
