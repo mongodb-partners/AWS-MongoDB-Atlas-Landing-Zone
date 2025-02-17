@@ -14,7 +14,7 @@ terraform {
 
   # S3 bucket in which the terraform state will be stored
   backend "s3" {
-    bucket = "S3_BUCKET_NAME" # Put in your S3 bucket name
+    bucket = "BUCKET_NAME" # Put in your S3 bucket name
     key    = "KEY_NAME" # Put in your key name (it is the path to the state file in the bucket)
     region = "AWS_REGION" # Put in your AWS region 
   }
@@ -97,9 +97,7 @@ module "private_subnet" {
 # MongoDB Atlas module
 module "mongodb_atlas" {
   source = "../../modules/mongodb-atlas"
-  atlas_public_key  = var.atlas_public_key
   atlas_org_id = var.atlas_org_id
-  atlas_private_key = var.atlas_private_key
   atlas_project_name = var.atlas_project_name
   cluster_name      = var.cluster_name
   instance_size     = var.instance_size
@@ -108,27 +106,3 @@ module "mongodb_atlas" {
   vpc_id            = module.vpc.id
   subnet_ids        = values(module.private_subnet)[*].id
 }
-
-# module "mongodb_atlas" {
-#   source = "../../modules/mongodb-atlas"
-
-#   atlas_public_key  = var.atlas_public_key
-#   atlas_private_key = var.atlas_private_key
-#   atlas_project_name = var.atlas_project_name
-#   cluster_name      = var.cluster_name
-#   instance_size     = var.instance_size
-#   database_version  = var.database_version
-#   aws_region        = var.aws_region
-#   vpc_id            = module.vpc.id
-#   s3_bucket_name    = var.s3_bucket_name
-#   iam_role_id       = var.iam_role_id
-# }
-
-# module "s3" {
-#   source  = "terraform-mongodbatlas-modules/push-based-log-export/mongodbatlas//modules/s3-bucket"
-#   project_id = module.mongodb_atlas.project_id
-#   bucket_name = module.mongodb_atlas.s3_bucket_name
-#   iam_role_name = "push-log-role"
-#   iam_role_policy_name = "push-log-policy"
-#   force_destroy = false
-# }

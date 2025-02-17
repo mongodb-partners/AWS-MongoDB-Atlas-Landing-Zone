@@ -20,17 +20,6 @@ variable "enable_vpc_flow_logs" {
   default     = true
 }
 
-# variable "environment" {
-#   type        = string
-#   description = "Environment where AWS resources are deployed"
-#   default     = "dev"
-# }
-
-# variable "product" {
-#   type        = string
-#   description = "Product name"
-# }
-
 variable "owner" {
   type = string
   description = "Who will be the owner of this resource (Type in your username like 'first_name.last_name')"
@@ -62,54 +51,33 @@ variable "vpc_cidr" {
 }
 
 # MONGODB ATLAS PART
-variable "atlas_public_key" {
-  description = "MongoDB Atlas Public API Key"
-  type        = string
-  default     = "YOUR PUBLIC KEY"
-}
-
-variable "atlas_private_key" {
-  description = "MongoDB Atlas Private API Key"
-  type        = string
-  default     = "YOUR PRIVATE KEY"
-}
-
 variable "atlas_org_id" {
   description = "ID of the MongoDB Atlas Organization"
   type        = string
-  default = "599f016c9f78f769464f5f94"
+  default = "YOUR_ORG_ID"
 }
 
 variable "atlas_project_name" {
   description = "Name of the MongoDB Atlas Project"
   type        = string
-  default = "anuj-lz-terraform"
+  default = "YOUR_PROJECT_NAME"
 }
 
 variable "cluster_name" {
   description = "Name of the MongoDB Atlas Cluster"
   type        = string
-  default = "appdb"
+  default = "YOUR_CLUSTER_NAME"
 }
 
 variable "instance_size" {
   description = "Instance size for the MongoDB Atlas Cluster"
   type        = string
-  default = "M10"
+  default = "DESIRED_INSTANCE_SIZE"
 }
 
 variable "database_version" {
   description = "Database version for the MongoDB Atlas Cluster"
   type        = string
-  default = "7.0"
+  default = "DESIRED_DATABASE_VERSION"
 }
 
-# variable "s3_bucket_name" {
-#   description = "Name of the S3 bucket for Atlas logs"
-#   type        = string
-# }
-
-# variable "iam_role_id" {
-#   description = "IAM Role ID for S3 bucket access"
-#   type        = string
-# }

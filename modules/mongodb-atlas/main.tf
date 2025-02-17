@@ -7,6 +7,16 @@ terraform {
   }
 }
 
+# Fetching the MongoDB Atlas API keys from AWS Secrets Manager
+data "aws_secretsmanager_secret" "mongodb_atlas" {
+  name = "YOUR_SECRET_NAME"  # Replace with your secret's name
+}
+
+# Fetching the secret string from the secret
+data "aws_secretsmanager_secret_version" "mongodb_atlas" {
+  secret_id = data.aws_secretsmanager_secret.mongodb_atlas.id
+}
+
 locals {
   # Split the string by comma
   split_string = split("-", var.aws_region)
@@ -16,12 +26,15 @@ locals {
 
   # Join the elements back together with a delimiter
   atlas_region = join("_", local.uppercase_elements)
+
+  # Parse the JSON string to get the API keys from the Secrets Manager
+  secrets = jsondecode(data.aws_secretsmanager_secret_version.mongodb_atlas.secret_string)
 }
 
 # MongoDB Atlas provider
 provider "mongodbatlas" {
-  public_key  = var.atlas_public_key
-  private_key = var.atlas_private_key
+  public_key  = local.secrets.public_key
+  private_key = local.secrets.private_key
 }
 
 # Create a MongoDB Atlas project
@@ -88,40 +101,3 @@ resource "aws_vpc_endpoint" "vpce_east" {
   subnet_ids         = [var.subnet_ids[0]]
   security_group_ids = [aws_security_group.my_security_group.id]
 }
-
-# resource "mongodbatlas_private_endpoint" "private_endpoint" {
-#   project_id = mongodbatlas_project.project.id
-#   cluster_name = mongodbatlas_cluster.cluster.name
-#   provider_name = "AWS"
-#   region = var.aws_region
-#   vpc_id = var.vpc_id
-# }
-
-# resource "aws_s3_bucket" "atlas_logs" {
-#   bucket = var.s3_bucket_name
-#   acl    = "private"
-# }
-
-# resource "mongodbatlas_cloud_provider_snapshot_backup_policy" "backup_policy" {
-#   project_id = mongodbatlas_project.project.id
-#   cluster_id = mongodbatlas_cluster.cluster.id
-#   reference_hour_of_day = 2
-#   reference_minute_of_hour = 0
-#   restore_window_days = 7
-#   update_snapshots = true
-#   policies {
-#     id = "default"
-#     policy_items {
-#       frequency_type = "daily"
-#       retention_unit = "days"
-#       retention_value = 7
-#     }
-#   }
-# }
-
-# resource "mongodbatlas_cloud_provider_snapshot_export_bucket" "export_bucket" {
-#   project_id = mongodbatlas_project.project.id
-#   cluster_id = mongodbatlas_cluster.cluster.id
-#   bucket_name = aws_s3_bucket.atlas_logs.bucket
-#   iam_role_id = var.iam_role_id
-# }

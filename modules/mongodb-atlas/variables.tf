@@ -1,13 +1,3 @@
-variable "atlas_public_key" {
-  description = "MongoDB Atlas Public API Key"
-  type        = string
-}
-
-variable "atlas_private_key" {
-  description = "MongoDB Atlas Private API Key"
-  type        = string
-}
-
 variable "atlas_org_id" {
   description = "ID of the MongoDB Atlas Organization"
   type        = string
@@ -47,13 +37,3 @@ variable "subnet_ids" {
   description = "List of AWS subnet IDs"
   type        = list(string)
 }
-
-# variable "s3_bucket_name" {
-#   description = "Name of the S3 bucket for Atlas logs"
-#   type        = string
-# }
-
-# variable "iam_role_id" {
-#   description = "IAM Role ID for S3 bucket access"
-#   type        = string
-# }

@@ -24,11 +24,20 @@ You _must_ have the following ready
 - Amazon S3 bucket (used to store the Terraform state)
 - At least 2 Elastic IP Address allocation IDs
 - MongoDB Atlas Organization ID
+- MongoDB Atlas Public and Private Keys
 
 ### How to get the Organization ID in MongoDB Atlas
 
 [Sign up](https://www.mongodb.com/cloud/atlas/register) on MongoDB Atlas, if you do not have an Atlas account.
 If you already have an Atlas account, follow the [steps](https://www.mongodb.com/docs/atlas/access/orgs-create-view-edit-delete/) to create an organization and you can copy the Organization ID once you successfully it.
+
+### Store the MongoDB Atlas Public & Private keys in AWS Secrets Manager
+
+Follow the [instructions](https://www.mongodb.com/docs/atlas/configure-api-access/#grant-programmatic-access-to-an-organization) at the organization level in MongoDB Atlas to generate API keys. 
+
+Then, [store](https://docs.aws.amazon.com/secretsmanager/latest/userguide/create_secret.html) these keys in AWS Secrets Manager to avoid manual entry during Terraform execution. 
+
+After that, update the secret name in the `modules/mongodb-atlas/main.tf` file (Line No. 12), so Terraform can retrieve the credentials from Secrets Manager during resource deployment.
 
 ### How to create AWS Access key ID and Secret Key
 
@@ -223,7 +232,7 @@ Examples
 ```
 "owner"   = "anuj.panchal"
 "purpose" = "partner"
-"expire-on"        = "2025-10-30"
+"expire-on" = "2025-10-30"
 ```
 
 You can use these tags to monitor your usage and cost by [Activating User-Defined Cost Allocation Tags](https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/activating-tags.html).
