@@ -7,9 +7,9 @@ enable_vpc_flow_logs          = true
 
 # You can modify this section as per the tags that you 
 # desire for your AWS services
-owner = "anuj.panchal" 
-purpose = "partner"
-expire-on = "2025-12-31"
+owner = "<YOUR_NAME>" 
+purpose = "<PURPOSE>" # Example: "partner"
+expire-on = "<DATE>" # Example: "2025-10-30"
 
 public_subnet_cidrs = {
   "us-east-2a" = "10.0.0.0/24"

@@ -20,9 +20,15 @@ variable "enable_vpc_flow_logs" {
   default     = true
 }
 
+variable "logging_bucket" {
+  type        = string
+  description = "S3 bucket name to receive access logs"
+  default     = "NAME OF YOUR LOGGING BUCKET"
+}
+
 variable "owner" {
   type = string
-  description = "Who will be the owner of this resource (Type in your username like 'first_name.last_name')"
+  description = "Who will be the owner of this resource"
 }
 
 variable "expire-on" {

@@ -15,7 +15,7 @@ terraform {
   # S3 bucket in which the terraform state will be stored
   backend "s3" {
     bucket = "BUCKET_NAME" # Put in your S3 bucket name
-    key    = "KEY_NAME" # Put in your key name (it is the path to the state file in the bucket)
+    key    = "KEY_NAME" # Put in your key name (it is the path to the state file in the bucket) Eg: "network/dev"
     region = "AWS_REGION" # Put in your AWS region 
   }
 }
@@ -41,10 +41,9 @@ provider "aws" {
 # VPC module
 module "vpc" {
   source = "../../modules/vpc"
-
-  cidr      = var.vpc_cidr
-  flow_logs = var.enable_vpc_flow_logs
-
+  cidr           = var.vpc_cidr
+  flow_logs      = var.enable_vpc_flow_logs
+  logging_bucket = var.logging_bucket
   common_tags = local.common_tags
 }
 
