@@ -40,3 +40,5 @@ terraform.rc
 # End of https://www.toptal.com/developers/gitignore/api/terraform
 environments/development/terraform.*
 environments/development/checkov-report.json
+environments/development/plan.tf
+checkov-report.json

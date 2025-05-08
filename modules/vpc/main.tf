@@ -98,6 +98,10 @@ resource "aws_s3_bucket_lifecycle_configuration" "vpc_flow_logs" {
     expiration {
       days = var.log_retention_days
     }
+
+    abort_incomplete_multipart_upload {
+      days_after_initiation = 7
+    }
   }
 }
 
@@ -109,22 +113,11 @@ resource "aws_default_security_group" "restrict_default" {
   # When you remove this resource, don’t try to recreate the default rules
   revoke_rules_on_delete = false
 
-  # Deny all inbound on the default SG
-  ingress {
-    description = "Deny all inbound on default SG"
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = []
-  }
-
-  # Deny all outbound on the default SG
-  egress {
-    description = "Deny all outbound on default SG"
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = []
-  }
+  tags = merge(
+    {
+      Component = local.vpc_component
+      Name      = join("-", [var.common_tags.purpose, var.common_tags.expire-on, "default-sg"])
+    }
+  )
 }
 
