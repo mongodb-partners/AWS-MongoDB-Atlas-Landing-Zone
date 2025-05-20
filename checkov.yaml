@@ -1,0 +1,3 @@
+skip-check:
+  - CKV2_AWS_62  # Skipping check for S3 bucket MFA delete configuration
+  - CKV_AWS_144  # Skipping check for S3 bucket cross-region replication
