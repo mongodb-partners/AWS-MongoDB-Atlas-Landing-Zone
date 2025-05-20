@@ -31,7 +31,7 @@ locals {
 
 provider "aws" {
   region = var.aws_region
-  profile = "anuj-dev" # COMMENT THIS PART IF YOU ARE USING AWS CREDENTIALS
+  profile = "YOUR_PROFILE" # COMMENT THIS PART IF YOU ARE USING AWS CREDENTIALS
 
   default_tags {
     tags = local.common_tags
